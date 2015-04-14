@@ -1,0 +1,140 @@
+\documentclass[spanish,a4paper]{article} 
+
+\usepackage{babel}
+\usepackage{soul}
+\usepackage[latin1]{inputenc}
+%\usepackage{bbm}
+\usepackage{framed}
+\input{../macros/Algo1Macros}
+
+
+
+
+\begin{document}
+
+\materia{Algoritmos y Estructura de Datos I}
+\cuatrimestre{1}
+\anio{2015}
+
+\fecha{1 de Abril de 2015}
+
+\nombre{\LARGE TPE - Flores vs Vampiros}
+
+\titulotp
+
+
+\section{Tipos}
+
+\input{tipos/tipos.tex}
+
+\section{Flor}
+\input{tipos/flor.tex}
+
+\begin{problema}{nuevaF}{v : \ent, cP : \ent, hs : [Habilidad]}{Flor}
+\end{problema}
+
+\begin{problema}{vidaF}{f: Flor}{\ent}
+\end{problema}
+
+\begin{problema}{cuantoPegaF}{f: Flor}{\ent}
+\end{problema}
+
+\begin{problema}{habilidadesF}{f: Flor}{[Habilidad]}
+\end{problema}
+
+
+
+\section{Vampiro}
+\input{tipos/vampiro.tex}
+
+\begin{problema}{nuevoV}{cv : ClaseVampiro, v : \ent, cP : \ent}{Vampiro}
+\end{problema}
+
+\begin{problema}{claseVampiroV}{v : Vampiro}{ClaseVampiro}
+\end{problema}
+
+\begin{problema}{vidaV}{v : Vampiro}{\ent}
+\end{problema}
+
+\begin{problema}{cuantoPegaV}{v : Vampiro}{\ent}
+\end{problema}
+
+% problemas igual a Flor
+
+\section{Nivel}
+\input{tipos/nivel.tex}
+
+\begin{problema}{nuevoN}{an : \ent, al : \ent, s : \ent, spaw : [(Vampiro, \ent, \ent)]}{Nivel}
+\end{problema}
+
+\begin{problema}{anchoN}{n : Nivel}{\ent}
+\end{problema}
+
+\begin{problema}{altoN}{n : Nivel}{\ent}
+\end{problema}
+
+
+\begin{problema}{turnoN}{n : Nivel}{\ent}
+\end{problema}
+
+\begin{problema}{solesN}{n : Nivel}{\ent}
+\end{problema}
+
+\begin{problema}{floresN}{n : Nivel}{[(Flor, Posicion, Vida)]}
+\end{problema}
+
+\begin{problema}{vampirosN}{n : Nivel}{[(Vampiro, Posicion, Vida)]}
+\end{problema}
+
+\begin{problema}{spawningN}{n : Nivel}{[(Vampiro, \ent, \ent)]}
+\end{problema}
+
+\begin{problema}{comprarSoles}{n: Nivel, s : \ent}{}
+\end{problema}
+
+\begin{problema}{obsesivoCompusilvo}{n: Nivel}{\bool}
+\end{problema}
+
+\begin{problema}{agregarFlor}{n: Nivel, f : Flor, p : Posicion}{}
+\end{problema}
+
+\noindent\aux{terminado}{n: Nivel}{\bool}{}
+
+\begin{problema}{pasarTurno}{n: Nivel}{}
+\end{problema}
+
+
+
+
+\section{Juego}
+\input{tipos/juego.tex}
+
+\begin{problema}{floresJ}{j: Juego}{[Flor]}
+\end{problema}
+
+\begin{problema}{vampirosJ}{j: Juego}{[Vampiro]}
+\end{problema}
+
+\begin{problema}{nivelesJ}{j: Juego}{[Nivel]}
+\end{problema}
+
+\begin{problema}{agregarNivelJ}{j: Juego, n: Nivel, i: \ent}{}
+\end{problema}
+
+\begin{problema}{estosSalenFacil}{j: Juego}{[Nivel]}
+\end{problema}
+
+\begin{problema}{jugarNivel}{j: Juego, n: Nivel, i: \ent}{}
+\end{problema}
+
+\begin{problema}{altoCheat}{j: Juego, i: \ent}{}
+\end{problema}
+
+\begin{problema}{muyDeExactas}{j: Juego}{\bool}
+\end{problema}
+
+\section{Auxiliares}
+\aux{vidaFloresOk}{fs: [(Flor, Posicion, Vida)]}{\bool}{(\forall f \selec fs) trd(f) > 0 \land trd(f) \leq vida(prm(f))}
+\aux{vidaVampirosOk}{fs: [(Vampiro, Posicion, Vida)]}{\bool}{(\forall f \selec fs) trd(f) > 0 \land trd(f) \leq vida(prm(f))}
+\aux{floresIguales}{x, y}{\bool}{mismos(habilidades(x), habilidades(y))}
+\end{document}
