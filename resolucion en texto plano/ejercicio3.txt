@@ -1,0 +1,24 @@
+Vampiro
+
+tipo Vampiro {
+	observador clase (v: Vampiro) : ClaseVampiro ;
+	observador vida (v: Vampiro) : Z ;
+	observador cuantoPega (v: Vampiro) : Z ;
+	invariante vidaEnRango : vida(v) >= 0 ^ vida(v) <= 100 ;
+	invariante pegaEnSerio : cuantoPega(v) > 0 ;
+}
+
+problema nuevoV (cv : ClaseVampiro, v : Z, cP : Z) = result : Vampiro{
+	requiere 0<=v <=100 && cP > 0;
+	asegura clase(result)==cV && vida(result) && cuantoPega(result)== cP
+
+}
+problema claseVampiroV (v : Vampiro) = result : ClaseVampiro{
+	asegura result == clase(v);	
+}
+problema vidaV (v : Vampiro) = result : Z{
+	asegura result == vida(v);
+}
+problema cuantoPegaV (v : Vampiro) = result : Z {
+	asegura result == cuantoPega(v);
+}
