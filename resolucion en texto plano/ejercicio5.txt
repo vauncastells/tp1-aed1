@@ -1,0 +1,74 @@
+5. Juego
+tipo Juego {
+	observador flores (j: Juego) : [Flor] ;
+	observador vampiros (j: Juego) : [Vampiro] ;
+	observador niveles (j: Juego) : [Nivel] ;
+	invariante floresDistintas : (8i; k   [0:: jflores(j)j); i 6= k):floresIguales(flores(j)i; flores(j)k) ;
+	invariante vampirosDistintos : sinRepetidos(vampiros(j)) ;
+	invariante nivelesConFloresValidas : : : : ;
+	invariante nivelesConVampirosValidos : : : : ;	
+
+}
+
+//Este invariante indica que los niveles de un juego solo poseen 
+//flores que estan en la lista de 
+//flores del juego.
+
+invariante nivelesConFloresValidas : todos(n, n<-niveles(j), en(prm(flores(n)),flores(j)));
+
+invariante nivelesConVampirosValidos : todos(n,n<-niveles(j), en(prm(vampiros(n)),vampiros (j)));
+
+//Devuelve las flores correspondientes al juego j.
+
+problema floresJ (j: Juego) = res : [Flor]{
+	asegura mismos(result,flores(j));
+}
+
+//Devuelve los vampiros correspondientes al juego j.
+problema vampirosJ (j: Juego) = res : [Vampiro]{
+	asegura mismos(res,vampiros(j));
+}
+
+//Devuelve los niveles correspondientes al juego j.
+problema nivelesJ (j: Juego) = res : [Nivel]{
+	asegura mismos(res,niveles(j));
+}
+
+//Modifica el juego j, agregando el nivel n como el i-nesimo nivel del juego. El nivel debe estar 
+//en su comienzo, es decir
+//en el primer turno y sin 
+//flores o vampiros sobre el tablero.
+
+problema agregarNivelJ (j: Juego, n: Nivel, i: Z){
+	modifica j;
+	requiere nivelValido : 	turno(n) == 0 
+							&& long(flores(n)) == 0 
+							&& long(vampiros(n))==0 
+							&& long(spawning (n))== 0;
+	asegura esMasGrande : long(niveles(j)) == long(niveles(pre(j))) + 1 ;
+	asegura ahoraEnNivelEsta : indice(niveles(j),i) == n;
+	asegura losDemasNoCambian : todos(k=!i,k<-[0..long(niveles(j))), indice(niveles(j),k) == indice(niveles(pre(j)),k));
+}
+
+//Dado el juego j, selecciona los niveles que mas soles tiene y, dentro de este grupo, devuelve 
+//los que mas plantas tienen.
+problema estosSalenFacil (j: Juego) = res: [Nivel]{
+	requiere long(niveles(j)) > 0;
+	asegura mismos(res, maxPlantas(maxSoles(niveles(res))));
+}
+
+aux maxSoles(ns : [Nivel]) : [Nivel] = [nivel, nivel<-ns, maxS(ns,soles(nivel))];
+aux maxS(ns:[Nivel],maximo) : Bool = (todos(nivel,nivel<-ns, soles(nivel) <= maximo));
+aux maxFlores(ns : [Nivel]) : [Nivel] = [nivel, nivel<-ns, maxP(ns,long(flores(nivel)))];
+aux maxP(ns:[Nivel],maximo) : Bool = (todos(nivel,nivel<-ns, long(flores(nivel)) <= maximo));
+
+
+//Este problema toma un juego j, una foto de un nivel n y un indice i. Luego, modifica el juego j de 
+//manera que el estado del nivel i-esimo pasa a ser n. Para que esto sea posible el nivel n debe //ser un posible estado futuro del i-esimo nivel del juego j.
+
+problema jugarNivel (j: Juego, n: Nivel, i: Z){
+	modifica j;
+	requiere altoOK : alto(indice(i,niveles(j))) == alto(n);
+	requiere anchoOK : alto(indice(i,niveles(j))) == ancho(n);
+
+}
