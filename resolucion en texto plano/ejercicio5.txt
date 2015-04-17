@@ -41,13 +41,13 @@ problema nivelesJ (j: Juego) = res : [Nivel]{
 
 problema agregarNivelJ (j: Juego, n: Nivel, i: Z){
 	modifica j;
+	requiere 0<i<long(niveles(pre(j)));
 	requiere nivelValido : 	turno(n) == 0 
 							&& long(flores(n)) == 0 
-							&& long(vampiros(n))==0 
-							&& long(spawning (n))== 0;
+							&& long(vampiros(n))==0;
 	asegura esMasGrande : long(niveles(j)) == long(niveles(pre(j))) + 1 ;
 	asegura ahoraEnNivelEsta : indice(niveles(j),i) == n;
-	asegura losDemasNoCambian : todos(k=!i,k<-[0..long(niveles(j))), indice(niveles(j),k) == indice(niveles(pre(j)),k));
+	asegura losDemasNoCambian : [indice(k,niveles(j)), k<-[0..i)] ++ [indice(k,niveles(j)), k<-(i..long(niveles(j)))] == niveles(pre(j));
 }
 
 //Dado el juego j, selecciona los niveles que mas soles tiene y, dentro de este grupo, devuelve 
@@ -68,7 +68,9 @@ aux maxP(ns:[Nivel],maximo) : Bool = (todos(nivel,nivel<-ns, long(flores(nivel))
 
 problema jugarNivel (j: Juego, n: Nivel, i: Z){
 	modifica j;
-	requiere altoOK : alto(indice(i,niveles(j))) == alto(n);
-	requiere anchoOK : alto(indice(i,niveles(j))) == ancho(n);
+	requiere altoOK : alto(indice(i,niveles(pre(j))) == alto(n);
+	requiere anchoOK : alto(indice(i,niveles(pre(j))) == ancho(n);
+	requiere turnoOK : turno(indice(i,niveles(pre(j))) < turno(n);
+	requiere spawnOk : todos(spawn, spawn<-spawning(indice(i,niveles(pre(j)))), 
 
 }
