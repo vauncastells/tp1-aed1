@@ -46,7 +46,7 @@ problema agregarNivelJ (j: Juego, n: Nivel, i: Z){
 							&& long(flores(n)) == 0 
 							&& long(vampiros(n))==0;
 	asegura esMasGrande : long(niveles(j)) == long(niveles(pre(j))) + 1 ;
-	asegura ahoraEnNivelEsta : indice(niveles(j),i) == n;
+	asegura ahoraEnNivelEsta : indice(i,niveles(j)) == n;
 	asegura losDemasNoCambian : [indice(k,niveles(j)), k<-[0..i)] ++ [indice(k,niveles(j)), k<-(i..long(niveles(j)))] == niveles(pre(j));
 }
 
@@ -71,6 +71,10 @@ problema jugarNivel (j: Juego, n: Nivel, i: Z){
 	requiere altoOK : alto(indice(i,niveles(pre(j))) == alto(n);
 	requiere anchoOK : alto(indice(i,niveles(pre(j))) == ancho(n);
 	requiere turnoOK : turno(indice(i,niveles(pre(j))) < turno(n);
-	requiere spawnOk : todos(spawn, spawn<-spawning(indice(i,niveles(pre(j)))), 
+	requiere spawnOk : todos(spawnI, spawnI<-spawning(indice(i,niveles(pre(j))))),todos(spawnN, spawnN<-spawning(N), prm(spawnI) == prm(spawnN) && sgd(spawnI) == sgd(spawnN) && tcr(spawnI) == tcr(spawnN);
+	asegura indice(i, niveles(j))==n;
+	asegura long(niveles(j)) == long(niveles(pre(j)));
+	asegura losDemasNoCambian : [indice(k,niveles(j)), k<-[0..i)] ++ [indice(k,niveles(j)), k<-(i..long(niveles(j)))] == niveles(pre(j));
+
 
 }
