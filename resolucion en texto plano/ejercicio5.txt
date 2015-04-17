@@ -90,6 +90,11 @@ problema altoCheat (j: Juego, i: Z){
 	asegura nadaMasCambio : todos(truplaPreV, truplaPreV<-vampiros(indice(i,niveles(pre(j))))), todos(truplaV, truplaV<-vampiros(indice(i,niveles((j))))), prm(truplaV) == prm(truplaPreV) && sgd(truplaV) == sgd(truplaPreV);
 }
 
-34. problema muyDeExactas (j: Juego) = result : Bool
-Este problema toma un juego j e indica si los niveles ganados son exactamente los que pertenecen a la sucesion de
-Fibonacci.
+//Este problema toma un juego j e indica si los niveles ganados son exactamente los que pertenecen a 
+//la sucesion de
+//Fibonacci.
+problema muyDeExactas (j: Juego) = result : Bool{
+	asegura sum(i, i<-ganados(niveles(j))) == indice(long(ganados(niveles(j))) - 1,ganados(niveles(j)));
+}
+
+aux ganados(ns : [Nivel]) : [Nivel] = [nivel, nivel<-ns, long(spawning(nivel))==0 && ] ;
