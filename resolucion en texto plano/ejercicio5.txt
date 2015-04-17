@@ -75,6 +75,21 @@ problema jugarNivel (j: Juego, n: Nivel, i: Z){
 	asegura indice(i, niveles(j))==n;
 	asegura long(niveles(j)) == long(niveles(pre(j)));
 	asegura losDemasNoCambian : [indice(k,niveles(j)), k<-[0..i)] ++ [indice(k,niveles(j)), k<-(i..long(niveles(j)))] == niveles(pre(j));
-
-
 }
+
+//Dado el juego j y el indice i. Modifica el i-esimo nivel de j haciendo que todos los vampiros vivos 
+//del nivel (no los que
+//estan esperando para spawnear) reduzcan su vida a la mitad. Reducir la vida a la mitad significa 
+//realizar una division
+//entera por 2 de la vida actual.
+
+problema altoCheat (j: Juego, i: Z){
+	modifica j;
+	requiere rangoOk :  0<=i<=long(niveles(pre(j));
+	asegura mitadVida : todos(truplaPreV, truplaPreV<-vampiros(indice(i,niveles(pre(j))))), todos(truplaV, truplaV<-vampiros(indice(i,niveles((j))))), tcr(truplaV) == tcr(truplaPreV)/2;
+	asegura nadaMasCambio : todos(truplaPreV, truplaPreV<-vampiros(indice(i,niveles(pre(j))))), todos(truplaV, truplaV<-vampiros(indice(i,niveles((j))))), prm(truplaV) == prm(truplaPreV) && sgd(truplaV) == sgd(truplaPreV);
+}
+
+34. problema muyDeExactas (j: Juego) = result : Bool
+Este problema toma un juego j e indica si los niveles ganados son exactamente los que pertenecen a la sucesion de
+Fibonacci.
