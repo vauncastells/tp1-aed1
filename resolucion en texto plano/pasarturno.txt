@@ -1,0 +1,53 @@
+observador ancho (n: Nivel) : Z ;
+observador alto (n: Nivel) : Z ;
+observador turno (n: Nivel) : Z ;
+observador soles (n: Nivel) : Z ;
+observador flores (n: Nivel) : [(Flor, Posicion, Vida)] ;
+observador vampiros (n: Nivel) : [(Vampiro, Posicion, Vida)] ;
+observador spawning (n: Nivel) : [(Vampiro, Z, Z)] ;
+invariante valoresRazonables : ancho(n) > 0 ^ alto(n) > 0 ^ soles(n)  0 ^ turno(n)  0 ;
+invariante posicionesValidas : : : : ;
+invariante spawningOrdenado : : : : ;
+invariante necesitoMiEspacio : (8i; j   [0::jflores(n)j); i 6= j)sgd(flores(n)i) 6= sgd(flores(n)j) ;
+invariante vivosPeroNoTanto : vidaF loresOk(flores(n)) ^ vidaV ampirosOk(vampiros(n)) ;
+invariante spawneanBien : (8t   spawning(n))sgd(t)  1 ^ sgd(t)  alto(n) ^ trd(t)  0 ;
+problema pasarTurno (n: Nivel){
+	
+	modifica n;
+	requiere !terminado(pre(n));
+	asegura turno(n) == turno(pre(n)) +1;
+	asegura soles(n) == long(floresGeneradoras(flores(pre(n)))) +1;
+	asegura floresExplotan : explotarFloresAtacadas(flores(n));
+	asegura floresAtacadas : todos(i, i<-[1..long(flores(n))), fueAtacada(i,n));
+	asegura avanzanVampiros : 
+	asegura noHayFloresMuertas(flores(n));
+	asegura noHayVampirosMuertos(vampiros(n));
+}
+
+aux floresGeneradoras(flores : [Flor]) : [Flor] = [flor, flor <- flores, esGeneradora(flor)];
+
+aux esGeneradora(flor : Flor) : Bool = alguno(h, h<-[1..long(habilidades(flor))), indice(h,habilidades(flor)) == 'Generar');
+
+aux esExplotadora(flor : Flor) : Bool = alguno(h, h<-[1..long(habilidades(flor))), indice(h,habilidades(flor)) == 'Explotar');
+
+aux explotarFloresAtacadas(flores : [Flor,Posicion,Vida], n : Nivel) : Bool = 
+todas(flor, flor<-flores, if (esExplotadora(prm(flor))&& hayVampiro(sgd(flor),n) then tcr(flor) == 0;
+
+aux hayVampiro(pos : Posicion, n :  nivel) : Bool = alguno(vampiro, vampiro<-vampiros(n), sgd(vampiro) == pos);
+
+aux noHayFloresMuertas(flores : [Flor,Posicion,Vida]) : Bool = todos(flor, flor<-flores, trc(flor)>0);
+
+aux noHayVampirosMuertos(flores : [Vampiro,Posicion,Vida]) : Bool = todos(vampiro, vampiro<-vampiros, trc(vampiro)>0);
+
+aux fueAtacada(i ,n : nivel) : Bool = tcr(indice(i,flores(n))) == tcr(indice(i,flores(pre(n)))) - ataquesV(sgd(indice(i,flores(n))),n) ;
+
+aux ataquesV(pos : Posicion , n : nivel) : Z = sum ([cuantoPega(prm(v)), v<-vampiros(pre(n)),sgd(v)==pos ]); 
+
+Las flores y los vampiros se modifican primero por sus ataques y luego por los movimientos. 
+Los vampiros reciben un ataque igual a la suma de lo que atacan todas las flores que esten en su misma fla, en una columna menor o igual a la del vampiro y que no haya un vampiro en una columna intermedia.
+
+Todos los vampiros que sobreviven a los anteriores ataques tratan de avanzar en el nivel. Si se encuentran en la misma posicion que una flor sobreviviente, entonces no pueden avanzar en este turno. Si se encuentran en la misma posicion que una flor con la habilidad de explotar, que acaba de morir, entonces retroceden una posicion.
+
+lo que significa que incrementan su valor de columna en 1. De lo contrario, avanzan una posicion, lo que significa que decrementan su valor de columna en 1. Ademas si el vampiro es de tipo Desviado y no se encuentra en la fila 1 del nivel, decrementa su valor de fila en 1.
+Por ultimo, aparecen los vampiros de la lista de spawning que coincidan con el turno actual, en la fila pertinente.
+Estos vampiros deben ser trasladados de la lista de spawning a la lista de vampiros del nivel.
